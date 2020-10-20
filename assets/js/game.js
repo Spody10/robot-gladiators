@@ -29,14 +29,22 @@ var fight = function (enemyName) {
       if (confirmSkip) {
         window.alert(playerName + " has decided to skip this fight. Goodbye!");
         // subtract money from playerMoney for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney);
         break;
       }
     }
+    // function to generate a random numeric value
+    var randomNumber = function (min, max) {
+      var value = Math.floor(Math.random() * (max - min + 1) + min);
 
-    // remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth = enemyHealth - playerAttack;
+      return value;
+    };
+
+    // generate random damage value based on player's attack power
+    var damage = randomNumber(playerAttack - 3, playerAttack);
+    enemyHealth = Math.max(0, enemyHealth - damage);
+
     console.log(
       playerName +
         " attacked " +
@@ -62,7 +70,10 @@ var fight = function (enemyName) {
     }
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
-    playerHealth = playerHealth - enemyAttack;
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+    playerHealth = Math.max(0, playerHealth - damage);
+
     console.log(
       enemyName +
         " attacked " +
@@ -116,7 +127,9 @@ var startGame = function () {
 
       var pickedEnemyName = enemyNames[i];
 
-      enemyHealth = 50;
+      var damage = randomNumber(playerAttack - 3, playerAttack);
+
+      enemyHealth = Math.max(0, enemyHealth - damage);
 
       fight(pickedEnemyName);
       // if player is still alive and we're not at the last enemy in the array
@@ -139,6 +152,7 @@ var startGame = function () {
   // after the loop ends, player is either out of health or enemies to fight, so run the endGame function
   endGame();
 };
+
 // function to end the entire game
 var endGame = function () {
   // if player is still alive, player wins!
@@ -155,6 +169,7 @@ var endGame = function () {
 // ask player if they'd like to play again
 var playAgainConfirm = window.confirm("Would you like to play again?");
 
+// shop function
 var shop = function () {
   // ask player what they'd like to do
   var shopOptionPrompt = window.prompt(
